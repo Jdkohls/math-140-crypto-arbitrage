@@ -5,6 +5,7 @@ import csv
 import matplotlib.pyplot as plt
 
 def csv_val_reader(infile):
+    """
     names = []
     with open(infile,newline='') as csvfile:
         reader = csv.reader(csvfile,delimiter=',',quotechar="|")
@@ -21,7 +22,10 @@ def csv_val_reader(infile):
                     print(f"Error for {names[i-1]}/{row[0]} rate ")
                     continue
             k+=1
+    """
+    adj_matrix = pd.read_csv(infile, header=0, index_col=0)
     graph = nx.DiGraph(-np.log(adj_matrix).fillna(0).T)
+    #print(-np.log(adj_matrix).fillna(0).T)
     return graph
 
 
@@ -36,3 +40,5 @@ def image_graph(outfile,graph, circular = True):
     #print(labels)
     nx.draw_networkx_edge_labels(graph,pos,edge_labels=labels)
     plt.savefig(outfile)
+
+#
