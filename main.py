@@ -19,6 +19,10 @@ g = data.parse_request(r)
 
 cycles = bellman.all_negative_cycles(g)
 print(cycles)
+arb_list = bellman.setify(cycles)
+print(arb_list)
+bellman.evaluate_arbitrage(g,arb_list)
+
 
 #Step 3: interpret
 
