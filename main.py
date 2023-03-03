@@ -3,18 +3,30 @@ import numpy as np
 import pandas as pd
 import csv
 
+
 import bellman
 import data
 
 #Step 1: prepare data
-graph = data.csv_val_reader('Exchange Rates.csv')
-data.image_graph("graph.png",graph,True)
-print("Done running!")
+coinlist = ["ETH","BTC","XRP","USDT","LTC","ADA","LINK","BUSD","DOT","APT","BNB","CFX","T","SOL","GMT","EOS"]
+r = data.get_request_cc(*coinlist)
+g = data.parse_request(r)
+
+#g = data.csv_val_reader("Exchange rates.csv")
+
 
 #Step 2: Bellman ford
-cycles = bellman.all_negative_cycles(graph)
+
+cycles = bellman.all_negative_cycles(g)
 print(cycles)
+
 #Step 3: interpret
+
+
+
+
+
+#print(r.json())
 
 """
 while(true)
