@@ -8,7 +8,7 @@ import bellman
 import data
 
 #Step 1: prepare data
-coinlist = ["ETH","BTC","XRP","USDT","LTC","ADA","LINK","BUSD","DOT","APT","BNB"]
+coinlist = ["ETH","BTC","XRP","USDT","LTC","ADA","LINK","BUSD","DOT","APT","BNB","CFX","T","SOL","GMT","EOS"]
 r = data.get_request_cc(*coinlist)
 g = data.parse_request(r)
 
