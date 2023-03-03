@@ -3,26 +3,38 @@ import numpy as np
 import pandas as pd
 import csv
 import matplotlib.pyplot as plt
+import requests
+import json
+
+
+def get_request_cc(*argv):
+    currency = ""
+    for i in argv:
+        currency += i
+        currency += ','
+    currency = currency[:-1:]
+    with open("secret","r") as file:
+        auth_key = file.readlines()
+        r = requests.get(f"https://min-api.cryptocompare.com/data/pricemulti?fsyms={currency}&tsyms={currency}&api_key={auth_key[0]}")
+    return r
+
+
+def parse_request(r):
+    exchange_dict = r.json()
+    names = [key for key in exchange_dict]
+    adj_matrix = pd.DataFrame(columns=names,index=names, dtype='float64')
+    for key in exchange_dict:
+        for value in exchange_dict[key]:
+            try:
+                adj_matrix[key][value] = exchange_dict[value][key] 
+            except KeyError:
+                    print(f"Error for {key}/{value} rate ")
+                    continue
+    print(adj_matrix)
+    graph = nx.DiGraph(-np.log(adj_matrix).fillna(0).T)
+    return graph
 
 def csv_val_reader(infile):
-    """
-    names = []
-    with open(infile,newline='') as csvfile:
-        reader = csv.reader(csvfile,delimiter=',',quotechar="|")
-        for row in reader:
-            names.append(row[0])
-        csvfile.seek(0)
-        adj_matrix = pd.DataFrame(columns=names,index=names,dtype='float64')        #Make a matrix  with the rows and columns as the names of the currencies. 
-        k=0
-        for row in reader:
-            for i in range(1,len(row)):
-                try:
-                    adj_matrix[names[i-1]][row[0]] = float(row[i])         #names[i-1] will be the names of the currency and row will be the currnecy we are currently looking at.
-                except KeyError:
-                    print(f"Error for {names[i-1]}/{row[0]} rate ")
-                    continue
-            k+=1
-    """
     adj_matrix = pd.read_csv(infile, header=0, index_col=0)
     graph = nx.DiGraph(-np.log(adj_matrix).fillna(0).T)
     #print(-np.log(adj_matrix).fillna(0).T)
