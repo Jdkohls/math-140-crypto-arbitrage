@@ -21,6 +21,7 @@ def get_request_cc(*argv):
 
 def parse_request(r):
     exchange_dict = r.json()
+    #print(exchange_dict)
     names = [key for key in exchange_dict]
     adj_matrix = pd.DataFrame(columns=names,index=names, dtype='float64')
     for key in exchange_dict:
@@ -30,7 +31,7 @@ def parse_request(r):
             except KeyError:
                     print(f"Error for {key}/{value} rate ")
                     continue
-    print(adj_matrix)
+    #print(adj_matrix)
     graph = nx.DiGraph(-np.log(adj_matrix).fillna(0).T)
     return graph
 

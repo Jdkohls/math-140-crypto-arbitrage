@@ -73,10 +73,13 @@ def setify(u: list): #clean up our data to make it easier to see; works under th
     return list(k)
 
 def evaluate_arbitrage(graph,arb_list):
+    fee = .0002
     for item in arb_list:
         print("\n")
         print("- "*15)
         mul_fac = 1
+        mul_fee = 1
+        total_fee = fee
         for i in range(len(item)):
             j=i+1
             if i == len(item)-1:
@@ -85,9 +88,11 @@ def evaluate_arbitrage(graph,arb_list):
             weight *= -1
             val = math.exp(weight)
             mul_fac *= val
+            mul_fee *= val*(1-fee)
             print(f"Connection {item[i]}-{item[j]} has exchange rate {val}")
         print("-"*20)
-        print(f"Overall cycle has exchange rate {mul_fac}!")
+        print(f"Overall cycle has exchange rate {mul_fac*100:.3f}%!")
+        print(f"Unfortunately, there will be {fee*100}% per trade of fees, for only {mul_fee*100:.3f}%...")
 
 
 
